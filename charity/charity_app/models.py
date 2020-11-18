@@ -18,6 +18,7 @@ class Category(models.Model):
 
 class Institution(models.Model):
     name = models.CharField(max_length=200)
+    description = models.TextField(null=True)
     type = models.IntegerField(choices=INSTITUTION_TYPES, default=1)
     categories = models.ManyToManyField(Category)
 

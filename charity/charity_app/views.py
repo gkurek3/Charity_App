@@ -33,8 +33,12 @@ class AddDonation(View):
         user = request.user
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-        # inst_cat = Institution.categories.all()
         return render(request, 'form.html', {'user': user, 'categories': categories, 'institutions': institutions})
+
+    def post(self, request):
+        user = request.user
+        bags = int(request.POST['bags'])
+        return HttpResponse(bags)
 
 
 class Login(View):
