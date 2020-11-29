@@ -2,308 +2,312 @@
 {% load static %}
 
 {% block content %}
-    <header class="header--form-page">
-        <nav class="container container--70">
-            <ul class="nav--actions">
-                {% if user.is_authenticated %}
-                    <li class="logged-user">
-                        Witaj {{ user.first_name }}
-                        <ul class="dropdown">
-                            <li><a href="{% url 'user-details' user.id %}">Profil</a></li>
-                            <li><a href="#">Ustawienia</a></li>
-                            {% if user.is_superuser %}
-                                <li><a href="http://127.0.0.1:8000/admin">Panel administracyjny</a></li>
-                            {% endif %}
-                            <li><a href="{% url 'logout' %}">Wyloguj</a></li>
-                        </ul>
+<header class="header--form-page">
+    <nav class="container container--70">
+        <ul class="nav--actions">
+            {% if user.is_authenticated %}
+            <li class="logged-user">
+                Witaj {{ user.first_name }}
+                <ul class="dropdown">
+                    <li><a href="{% url 'user-details' user.id %}">Profil</a></li>
+                    <li><a href="#">Ustawienia</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="http://127.0.0.1:8000/admin">Panel administracyjny</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}">Wyloguj</a></li>
+                </ul>
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+            <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+            {% endif %}
+
+        </ul>
+
+        <ul>
+            <li><a href="../" class="btn btn--without-border active">Start</a></li>
+            <li><a href="../#steps" class="btn btn--without-border">O co chodzi?</a></li>
+            <li><a href="../#about-us" class="btn btn--without-border">O nas</a></li>
+            <li><a href="../#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+            <li><a href="{% url 'add-donation' %}" class="btn btn--without-border">Przekaż dary</a></li>
+            <li><a href="../#contact" class="btn btn--without-border">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <div class="slogan container container--90">
+        <div class="slogan--item">
+            <h1>
+                Oddaj rzeczy, których już nie chcesz<br/>
+                <span class="uppercase">potrzebującym</span>
+            </h1>
+
+            <div class="slogan--steps">
+                <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
+                <ul class="slogan--steps-boxes">
+                    <li>
+                        <div><em>1</em><span>Wybierz rzeczy</span></div>
                     </li>
-                {% else %}
-                    <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-                    <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-                {% endif %}
-
-            </ul>
-
-            <ul>
-                <li><a href="../" class="btn btn--without-border active">Start</a></li>
-                <li><a href="../#steps" class="btn btn--without-border">O co chodzi?</a></li>
-                <li><a href="../#about-us" class="btn btn--without-border">O nas</a></li>
-                <li><a href="../#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
-                <li><a href="{% url 'add-donation' %}" class="btn btn--without-border">Przekaż dary</a></li>
-                <li><a href="../#contact" class="btn btn--without-border">Kontakt</a></li>
-            </ul>
-        </nav>
-
-        <div class="slogan container container--90">
-            <div class="slogan--item">
-                <h1>
-                    Oddaj rzeczy, których już nie chcesz<br/>
-                    <span class="uppercase">potrzebującym</span>
-                </h1>
-
-                <div class="slogan--steps">
-                    <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
-                    <ul class="slogan--steps-boxes">
-                        <li>
-                            <div><em>1</em><span>Wybierz rzeczy</span></div>
-                        </li>
-                        <li>
-                            <div><em>2</em><span>Spakuj je w worki</span></div>
-                        </li>
-                        <li>
-                            <div><em>3</em><span>Wybierz fundację</span></div>
-                        </li>
-                        <li>
-                            <div><em>4</em><span>Zamów kuriera</span></div>
-                        </li>
-                    </ul>
-                </div>
+                    <li>
+                        <div><em>2</em><span>Spakuj je w worki</span></div>
+                    </li>
+                    <li>
+                        <div><em>3</em><span>Wybierz fundację</span></div>
+                    </li>
+                    <li>
+                        <div><em>4</em><span>Zamów kuriera</span></div>
+                    </li>
+                </ul>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 {% if user.is_authenticated %}
-    <section class="form--steps">
-        <div class="form--steps-instructions">
-            <div class="form--steps-container">
-                <h3>Ważne!</h3>
-                <p data-step="1" class="active">
-                    Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
-                    wiedzieć komu najlepiej je przekazać.
-                </p>
-                <p data-step="2">
-                    Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
-                    wiedzieć komu najlepiej je przekazać.
-                </p>
-                <p data-step="3">
-                    Wybierz jedną, do
-                    której trafi Twoja przesyłka.
-                </p>
-                <p data-step="4">Podaj adres oraz termin odbioru rzeczy.</p>
-                <p data-step="5" id="errorText"></p>
-            </div>
-        </div>
-
+<section class="form--steps">
+    <div class="form--steps-instructions">
         <div class="form--steps-container">
-            <div class="form--steps-counter">Krok <span>1</span>/5</div>
+            <h3>Ważne!</h3>
+            <p data-step="1" class="active">
+                Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
+                wiedzieć komu najlepiej je przekazać.
+            </p>
+            <p data-step="2">
+                Uzupełnij szczegóły dotyczące Twoich rzeczy. Dzięki temu będziemy
+                wiedzieć komu najlepiej je przekazać.
+            </p>
+            <p data-step="3">
+                Wybierz jedną, do
+                której trafi Twoja przesyłka.
+            </p>
+            <p data-step="4">Podaj adres oraz termin odbioru rzeczy.</p>
+            <p data-step="5" id="errorText"></p>
+        </div>
+    </div>
 
-            <form action="{% url 'form-confirmation' %}" method="post">
+    <div class="form--steps-container">
+        <div class="form--steps-counter">Krok <span>1</span>/5</div>
+
+        <form action="{% url 'form-confirmation' %}" method="post">
             {% csrf_token %}
 
-                <!-- STEP 1: class .active is switching steps -->
-                <div data-step="1" class="active">
-                    <h3>Zaznacz co chcesz oddać:</h3>
+            <!-- STEP 1: class .active is switching steps -->
+            <div data-step="1" class="active">
+                <h3>Zaznacz co chcesz oddać:</h3>
 
-                        {% for category in categories %}
-                    <div class="form-group form-group--checkbox">
-                        <label>
-                            <input
-                                    type="checkbox"
-                                    name="categories"
-                                    id="{{ category.id }}"
-                                    value="{{ category.name }}"
-                            />
-                            <span class="checkbox" id="{{ category.id }}"></span>
-                            <span class="description"
-                            >{{ category.name }}</span
-                            >
-                        </label>
-                    </div>
-                        {% endfor %}
+                {% for category in categories %}
+                <div class="form-group form-group--checkbox">
+                    <label>
+                        <input
+                                type="checkbox"
+                                name="categories"
+                                id="{{ category.id }}"
+                                value="{{ category.name }}"
+                        />
+                        <span class="checkbox" id="{{ category.id }}"></span>
+                        <span class="description"
+                        >{{ category.name }}</span
+                        >
+                    </label>
+                </div>
+                {% endfor %}
 
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn next-step" disabled id="1step">Dalej</button>
-                    </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn next-step" disabled id="1step">Dalej</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div data-step="2">
+                <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
+
+                <div class="form-group form-group--inline">
+                    <label>
+                        Liczba 60l worków:
+                        <input type="number" name="bags" step="1" min="1"/>
+                    </label>
                 </div>
 
-                <!-- STEP 2 -->
-                <div data-step="2">
-                    <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
-
-                    <div class="form-group form-group--inline">
-                        <label>
-                            Liczba 60l worków:
-                            <input type="number" name="bags" step="1" min="1"/>
-                        </label>
-                    </div>
-
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="button" class="btn next-step" disabled id="2step">Dalej</button>
-                    </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step" disabled id="2step">Dalej</button>
                 </div>
+            </div>
 
-                                <!-- STEP 3 -->
-                <div data-step="3">
-                    <h3>Wybierz organizacje, której chcesz pomóc:</h3>
-                        {% for institution in institutions %}
-                    <div class="form-group form-group--checkbox" style="display: none"
-                         data-categories = "{% for cat in institution.categories.all %}
+            <!-- STEP 3 -->
+            <div data-step="3">
+                <h3>Wybierz organizacje, której chcesz pomóc:</h3>
+                {% for institution in institutions %}
+                <div class="form-group form-group--checkbox" style="display: none"
+                     data-categories="{% for cat in institution.categories.all %}
                                                {{ cat.id }},
                                                 {% endfor %}"
-                         name="div_organization">
-                        <label>
-                            <input type="radio" name="organization" value="{{ institution.name }}" id="{{ institution.id }}"/>
-                            <span class="checkbox radio"></span>
-                            <span class="description">
+                     name="div_organization">
+                    <label>
+                        <input type="radio" name="organization" value="{{ institution.name }}"
+                               id="{{ institution.id }}"/>
+                        <span class="checkbox radio"></span>
+                        <span class="description">
                   <div class="title">{{ institution.name }}</div>
                   <div class="subtitle">
                     {{ institution.description }}
                   </div>
                 </span>
-                        </label>
+                    </label>
 
+                </div>
+                {% endfor %}
+
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step" disabled id="3step">Dalej</button>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div data-step="4">
+                <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
+
+                <div class="form-section form-section--columns">
+                    <div class="form-section--column">
+                        <h4>Adres odbioru</h4>
+                        <div class="form-group form-group--inline">
+                            <label> Ulica <input type="text" name="address"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label> Miasto <input type="text" name="city"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Kod pocztowy <input type="text" name="postcode"/>
+                            </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Numer telefonu <input type="phone" name="phone"/>
+                            </label>
+                        </div>
                     </div>
-{% endfor %}
 
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="button" class="btn next-step" disabled id="3step">Dalej</button>
+                    <div class="form-section--column">
+                        <h4>Termin odbioru</h4>
+                        <div class="form-group form-group--inline">
+                            <label> Data <input type="date" name="data"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label> Godzina <input type="time" name="time"/> </label>
+                        </div>
+
+                        <div class="form-group form-group--inline">
+                            <label>
+                                Uwagi dla kuriera
+                                <textarea name="more_info" rows="5"></textarea>
+                            </label>
+                        </div>
                     </div>
                 </div>
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="button" class="btn next-step">Dalej</button>
+                </div>
+            </div>
 
-                <!-- STEP 4 -->
-                <div data-step="4">
-                    <h3>Podaj adres oraz termin odbioru rzecz przez kuriera:</h3>
+            <!-- STEP 5 -->
+            <div data-step="5">
+                <h3>Podsumowanie Twojej darowizny</h3>
+
+                <div class="summary">
+                    <div class="form-section">
+                        <h4>Oddajesz:</h4>
+                        <ul>
+                            <li>
+                                <span class="icon icon-bag"></span>
+                                <span class="summary--text" id="no_of_bags">
+                                        4 worki ubrań w dobrym stanie dla dzieci</span>
+                            </li>
+
+                            <li>
+                                <span class="icon icon-hand"></span>
+                                <span class="summary--text" id="for_who"
+                                >Dla fundacji "Mam marzenie" w Warszawie</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="form-section form-section--columns">
                         <div class="form-section--column">
-                            <h4>Adres odbioru</h4>
-                            <div class="form-group form-group--inline">
-                                <label> Ulica <input type="text" name="address"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label> Miasto <input type="text" name="city"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Kod pocztowy <input type="text" name="postcode"/>
-                                </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Numer telefonu <input type="phone" name="phone"/>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-section--column">
-                            <h4>Termin odbioru</h4>
-                            <div class="form-group form-group--inline">
-                                <label> Data <input type="date" name="data"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label> Godzina <input type="time" name="time"/> </label>
-                            </div>
-
-                            <div class="form-group form-group--inline">
-                                <label>
-                                    Uwagi dla kuriera
-                                    <textarea name="more_info" rows="5"></textarea>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="button" class="btn next-step">Dalej</button>
-                    </div>
-                </div>
-
-                <!-- STEP 5 -->
-                <div data-step="5">
-                    <h3>Podsumowanie Twojej darowizny</h3>
-
-                    <div class="summary">
-                        <div class="form-section">
-                            <h4>Oddajesz:</h4>
+                            <h4>Adres odbioru:</h4>
                             <ul>
-                                <li>
-                                    <span class="icon icon-bag"></span>
-                                    <span class="summary--text" id="no_of_bags">
-                                        4 worki ubrań w dobrym stanie dla dzieci</span>
-                                </li>
-
-                                <li>
-                                    <span class="icon icon-hand"></span>
-                                    <span class="summary--text" id="for_who"
-                                    >Dla fundacji "Mam marzenie" w Warszawie</span
-                                    >
-                                </li>
+                                <li id="address">Prosta 51</li>
+                                <li id="city">Warszawa</li>
+                                <li id="postcode">99-098</li>
+                                <li id="phone">123 456 789</li>
                             </ul>
                         </div>
 
-                        <div class="form-section form-section--columns">
-                            <div class="form-section--column">
-                                <h4>Adres odbioru:</h4>
-                                <ul>
-                                    <li id="address">Prosta 51</li>
-                                    <li id="city">Warszawa</li>
-                                    <li id="postcode">99-098</li>
-                                    <li id="phone">123 456 789</li>
-                                </ul>
-                            </div>
-
-                            <div class="form-section--column">
-                                <h4>Termin odbioru:</h4>
-                                <ul>
-                                    <li id="data">13/12/2018</li>
-                                    <li id="time">15:40</li>
-                                    <li id="more_info">Brak uwag</li>
-                                </ul>
-                            </div>
+                        <div class="form-section--column">
+                            <h4>Termin odbioru:</h4>
+                            <ul>
+                                <li id="data">13/12/2018</li>
+                                <li id="time">15:40</li>
+                                <li id="more_info">Brak uwag</li>
+                            </ul>
                         </div>
                     </div>
-
-                    <div class="form-group form-group--buttons">
-                        <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="submit" class="btn" disabled id="5step">Potwierdzam</button>
-                    </div>
                 </div>
-            </form>
-        </div>
+
+                <div class="form-group form-group--buttons">
+                    <button type="button" class="btn prev-step">Wstecz</button>
+                    <button type="submit" class="btn" disabled id="5step">Potwierdzam</button>
+                </div>
+            </div>
+        </form>
+    </div>
     {% endif %}
-    </section>
+</section>
 
-    <footer>
-        <div class="contact">
-            <h2>Skontaktuj się z nami</h2>
-            <h3>Formularz kontaktowy</h3>
-            <form class="form--contact">
-                <div class="form-group form-group--50">
-                    <input type="text" name="name" placeholder="Imię"/>
-                </div>
-                <div class="form-group form-group--50">
-                    <input type="text" name="surname" placeholder="Nazwisko"/>
-                </div>
+<footer>
+    <div class="contact">
+        <h2>Skontaktuj się z nami</h2>
+        <h3>Formularz kontaktowy</h3>
+        <form class="form--contact">
+            <div class="form-group form-group--50">
+                <input type="text" name="name" placeholder="Imię"/>
+            </div>
+            <div class="form-group form-group--50">
+                <input type="text" name="surname" placeholder="Nazwisko"/>
+            </div>
 
-                <div class="form-group">
+            <div class="form-group">
             <textarea
                     name="message"
                     placeholder="Wiadomość"
                     rows="1"
             ></textarea>
-                </div>
-
-                <button class="btn" type="submit">Wyślij</button>
-            </form>
-        </div>
-        <div class="bottom-line">
-            <span class="bottom-line--copy">Copyright &copy; 2018</span>
-            <div class="bottom-line--icons">
-                <a href="#" class="btn btn--small"
-                ><img src={% static 'images/icon-facebook.svg' %}
-                /></a>
-                <a href="#" class="btn btn--small"
-                ><img src={% static 'images/icon-instagram.svg' %}
-                /></a>
             </div>
-        </div>
-    </footer>
 
-    <script src={% static 'js/app.js' %}></script>
-    </body>
-{% endblock %}
+            <button class="btn" type="submit">Wyślij</button>
+        </form>
+    </div>
+    <div class="bottom-line">
+        <span class="bottom-line--copy">Copyright &copy; 2018</span>
+        <div class="bottom-line--icons">
+            <a href="#" class="btn btn--small"
+            ><img src={% static 'images/icon-facebook.svg' %}
+                /></a>
+            <a href="#" class="btn btn--small"
+            ><img src={% static 'images/icon-instagram.svg' %}
+                /></a>
+        </div>
+    </div>
+</footer>
+
+<script src={% static 'js/app.js' %}></script>
+<
+/body>
+{%
+    endblock %
+}

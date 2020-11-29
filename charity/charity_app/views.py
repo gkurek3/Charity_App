@@ -31,10 +31,6 @@ class LandingPage(View):
 class AddDonation(View):
 
     def get(self, request):
-        # print("ala ma kota")
-        # import ipdb
-        #
-        # ipdb.set_trace()
         user = request.user
         categories = Category.objects.all()
         institutions = Institution.objects.all()
