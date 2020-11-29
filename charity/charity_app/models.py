@@ -22,6 +22,9 @@ class Institution(models.Model):
     type = models.IntegerField(choices=INSTITUTION_TYPES, default=1)
     categories = models.ManyToManyField(Category)
 
+    def __str__(self):
+        return self.name
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()
@@ -35,3 +38,5 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, default=None)
+    picked = models.BooleanField(default=False, null=True)
+    date_time_picked = models.DateTimeField(null=True)

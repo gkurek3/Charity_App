@@ -232,12 +232,45 @@ document.addEventListener("DOMContentLoaded", function () {
                     slide.classList.add("active");
                 }
             });
+
+            if (this.currentStep === 1) {
+                const inst_choice = Array.from(document.getElementsByName('categories'));
+                const button = document.querySelector('button');
+                const checked = [];
+                inst_choice.forEach(function (el) {
+                    el.addEventListener('click', function () {
+                        button.disabled = false;
+                    });
+                });
+            }
+
+            if (this.currentStep === 2) {
+                const bags = document.getElementsByName('bags');
+                const button = document.querySelectorAll('.btn.next-step')[1];
+
+                bags.forEach(function (el) {
+                    el.addEventListener('keyup', function () {
+                        button.disabled = false;
+                    });
+                    el.addEventListener('click', function () {
+                        button.disabled = false;
+                    })
+                });
+
+            }
+
             if (this.currentStep === 3) {
                 const inst_choice = Array.from(document.getElementsByName('categories'));
                 const organizations = Array.from(document.getElementsByName('div_organization'));
+                const button = document.querySelectorAll('.btn.next-step')[2];
+
+
                 inst_choice.forEach(function (el) {
                     if (el.checked === true) {
                         organizations.forEach(function (element) {
+                            element.addEventListener('click', function () {
+                                button.disabled = false;
+                            });
                             if (element.dataset.categories.includes(el.id)) {
                                 element.style.display = 'block';
                             }
@@ -245,7 +278,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
             }
-            if (this.currentStep === 5){
+
+            if (this.currentStep === 5) {
                 const bag_number = document.getElementsByName("bags")[0].value;
                 const bag_info = document.querySelector("#no_of_bags");
                 const inst_choice = Array.from(document.getElementsByName('categories'));
@@ -258,19 +292,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 const data = document.getElementsByName('data');
                 const time = document.getElementsByName('time');
                 const more_info = document.getElementsByName('more_info');
+                const button = document.querySelectorAll('button')[8];
+                const error_text = document.querySelector('#errorText');
+                const h3 = document.querySelectorAll('h3')[0];
 
                 const cat_checked = [];
                 inst_choice.forEach(function (el) {
-                  if (el.checked === true) {
-                      cat_checked.push(el.value);
-                  }
+                    if (el.checked === true) {
+                        cat_checked.push(el.value);
+                    }
                 });
 
                 const inst_checked = [];
-                organizations.forEach(function (el){
-                   if (el.checked === true) {
-                       inst_checked.push(el.value);
-                   }
+                organizations.forEach(function (el) {
+                    if (el.checked === true) {
+                        inst_checked.push(el.value);
+                    }
                 });
 
                 bag_info.innerHTML = `${bag_number} worków ${cat_checked}`;
@@ -282,6 +319,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector('#data').innerHTML = data[0].value;
                 document.querySelector('#time').innerHTML = time[0].value;
                 document.querySelector('#more_info').innerHTML = more_info[0].value;
+
+                if (bag_number.length === 0) {
+                    h3.innerHTML = "BŁĄÐ!"
+                    error_text.innerHTML = "Nie podałeś/podałaś ilości worków!"
+                } else if (address[0].value.length === 0 || city[0].value.length === 0 || postcode[0].value.length === 0 || phone[0].value.length === 0 || data[0].value.length === 0 || time[0].value.length === 0) {
+                    h3.innerHTML = "BŁĄÐ!"
+                    error_text.innerHTML = "Wypełnił poprawnie formularz odbioru paczki!"
+                } else {
+                    button.disabled = false;
+                }
             }
 
             this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
@@ -296,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
          * TODO: validation, send data to server
          */
         submit(e) {
-            e.preventDefault();
+            // e.preventDefault();
             this.currentStep++;
             this.updateForm();
         }
@@ -306,47 +353,4 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form !== null) {
         new FormSteps(form);
     }
-    const inst_choice = Array.from(document.querySelectorAll('span.checkbox'));
-
-    // const choices = [];
-    // inst_choice.forEach(function (element){
-    //   element.addEventListener('click', function (){
-    //     choices.push(element.id);
-    //     return choices;
-    //   });
-    // });
-
-    const organizations = Array.from(document.getElementsByName('div_organization'));
-
-    // const choices = [];
-    // inst_choice.forEach(function (element){
-    //   element.addEventListener('click', function (){
-    //     choices.push(element.id);
-    //     console.log(element.id);
-    //   });
-    //   for (let i=0; i<choices.length; i++){
-    //     organizations.forEach(function (element){
-    //       if (element.dataset.categories.includes(choices[i])){
-    //         element.style.display = 'block';
-    //   }
-    // });
-    //   }
-    // });
-
-    // organizations.forEach(function (element){
-    //   let a = 1;
-    //   if (element.dataset.categories.indexOf("1") >= 0){
-    //     element.style.display = 'block';
-    //   }
-    // });
-
-    //   organizations.forEach(function (element){
-    //   if (element.dataset.categories.includes("2")){
-    //     element.style.display = 'block';
-    //   }
-    // });
-
-    // organizations.forEach(function (element){
-    //   console.log(element.dataset.categories);
-    // });
 });

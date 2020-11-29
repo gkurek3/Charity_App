@@ -4,11 +4,26 @@
 {% block content %}
 
     <header class="header--main-page">
-      <nav class="container container--70">
-        <ul class="nav--actions">
-          <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-          <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-        </ul>
+        <nav class="container container--70">
+            <ul class="nav--actions">
+                {% if user.is_authenticated %}
+                    <li class="logged-user">
+                        Witaj {{ user.first_name }}
+                        <ul class="dropdown">
+                            <li><a href="{% url 'user-details' user.id %}">Profil</a></li>
+                            <li><a href="#">Ustawienia</a></li>
+                            {% if user.is_superuser %}
+                                <li><a href="http://127.0.0.1:8000/admin">Panel administracyjny</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'logout' %}">Wyloguj</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+                    <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+                {% endif %}
+
+            </ul>
 
         <ul>
           <li><a href="" class="btn btn--without-border active">Start</a></li>

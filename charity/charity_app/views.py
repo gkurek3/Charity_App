@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
+from datetime import *
 
 from charity_app.models import Donation, Institution, Category
 
@@ -30,15 +31,14 @@ class LandingPage(View):
 class AddDonation(View):
 
     def get(self, request):
+        # print("ala ma kota")
+        # import ipdb
+        #
+        # ipdb.set_trace()
         user = request.user
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'user': user, 'categories': categories, 'institutions': institutions})
-
-    def post(self, request):
-        user = request.user
-        bags = int(request.POST['bags'])
-        return HttpResponse(bags)
 
 
 class Login(View):
@@ -80,3 +80,49 @@ class Logout(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect(reverse_lazy('main'))
+
+
+class FormConfirmation(View):
+
+    def get(self, request):
+        return render(request, 'form-confirmation.html')
+
+    def post(self, request):
+        user = request.user
+        bags = request.POST.get('bags')
+        categories = request.POST.getlist('categories')
+        organization = request.POST.get('organization')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        postcode = request.POST.get('postcode')
+        phone = request.POST.get('phone')
+        data = request.POST.get('data')
+        time = request.POST.get('time')
+        more_info = request.POST.get('more_info')
+
+        institution = Institution.objects.get(name=organization)
+        donation = Donation.objects.create(quantity=bags, address=address, phone_number=phone, city=city,
+                                           zip_code=postcode, pick_up_date=data, pick_up_time=time,
+                                           pick_up_comment=more_info, institution_id=institution.id,
+                                           user_id=user.id)
+        for el in categories:
+            category = Category.objects.get(name=el)
+            donation.categories.add(category)
+        return render(request, 'form-confirmation.html')
+
+
+class UserDetails(View):
+
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        donations = Donation.objects.filter(user_id=user.id).order_by('-picked', '-date_time_picked')
+        return render(request, 'user_details.html', {'user': user, 'donations': donations})
+
+    def post(self, request, id):
+        if request.POST.get('confirm'):
+            user = self.request.user
+            donation = Donation.objects.get(id=int(request.POST.get('confirm')))
+            donation.picked = True
+            donation.date_time_picked = datetime.now()
+            donation.save()
+            return redirect(reverse_lazy('user-details', kwargs={'id': user.id}))

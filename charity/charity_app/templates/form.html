@@ -9,8 +9,11 @@
                     <li class="logged-user">
                         Witaj {{ user.first_name }}
                         <ul class="dropdown">
-                            <li><a href="#">Profil</a></li>
+                            <li><a href="{% url 'user-details' user.id %}">Profil</a></li>
                             <li><a href="#">Ustawienia</a></li>
+                            {% if user.is_superuser %}
+                                <li><a href="http://127.0.0.1:8000/admin">Panel administracyjny</a></li>
+                            {% endif %}
                             <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                         </ul>
                     </li>
@@ -58,7 +61,7 @@
             </div>
         </div>
     </header>
-
+{% if user.is_authenticated %}
     <section class="form--steps">
         <div class="form--steps-instructions">
             <div class="form--steps-container">
@@ -76,13 +79,15 @@
                     której trafi Twoja przesyłka.
                 </p>
                 <p data-step="4">Podaj adres oraz termin odbioru rzeczy.</p>
+                <p data-step="5" id="errorText"></p>
             </div>
         </div>
-{% if user.is_authenticated %}
+
         <div class="form--steps-container">
             <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-            <form action="form-confirmation.html" method="post">
+            <form action="{% url 'form-confirmation' %}" method="post">
+            {% csrf_token %}
 
                 <!-- STEP 1: class .active is switching steps -->
                 <div data-step="1" class="active">
@@ -106,7 +111,7 @@
                         {% endfor %}
 
                     <div class="form-group form-group--buttons">
-                        <button type="button" class="btn next-step">Dalej</button>
+                        <button type="button" class="btn next-step" disabled id="1step">Dalej</button>
                     </div>
                 </div>
 
@@ -123,30 +128,9 @@
 
                     <div class="form-group form-group--buttons">
                         <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="button" class="btn next-step">Dalej</button>
+                        <button type="button" class="btn next-step" disabled id="2step">Dalej</button>
                     </div>
                 </div>
-
-{#Wersja Krzyśka#}
-{#                <!-- STEP 3 -->#}
-{#                <div data-step="3">#}
-{#                    <h3>Wybierz organizacje, której chcesz pomóc:</h3>#}
-{#                        {% for institution in institutions %}#}
-{#                    <div class="form-group form-group--checkbox">#}
-{#                        <label>#}
-{#                            <input class="organization" type="radio" name="organization" value="institution.id"/>#}
-{#                            <span class="checkbox radio"></span>#}
-{#                            <span class="description">#}
-{#                  <div class="title">{{ institution.type_verbose }} {{ institution.name }}</div>#}
-{#                  <div class="subtitle">#}
-{#                    Cel i misja: Pomoc dla osób nie posiadających miejsca#}
-{#                    zamieszkania#}
-{#                  </div>#}
-{#                </span>#}
-{#                        </label>#}
-{##}
-{#                    </div>#}
-{#{% endfor %}#}
 
                                 <!-- STEP 3 -->
                 <div data-step="3">
@@ -171,23 +155,9 @@
                     </div>
 {% endfor %}
 
-{#                    <div class="form-group form-group--checkbox">#}
-{#                        <label>#}
-{#                            <input type="radio" name="organization" value="old"/>#}
-{#                            <span class="checkbox radio"></span>#}
-{#                            <span class="description">#}
-{#                  <div class="title">Fundacja “Dla dzieci"</div>#}
-{#                  <div class="subtitle">#}
-{#                    Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji#}
-{#                    życiowej.#}
-{#                  </div>#}
-{#                </span>#}
-{#                        </label>#}
-{#                    </div>#}
-
                     <div class="form-group form-group--buttons">
                         <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="button" class="btn next-step">Dalej</button>
+                        <button type="button" class="btn next-step" disabled id="3step">Dalej</button>
                     </div>
                 </div>
 
@@ -290,7 +260,7 @@
 
                     <div class="form-group form-group--buttons">
                         <button type="button" class="btn prev-step">Wstecz</button>
-                        <button type="submit" class="btn">Potwierdzam</button>
+                        <button type="submit" class="btn" disabled id="5step">Potwierdzam</button>
                     </div>
                 </div>
             </form>
